@@ -42,7 +42,7 @@ public:
 	bool IsEnd      ( void );      // конец списка?
 
 	//Вставка звеньев
-	void insfirst (const T& el);   // перед первым
+	void insfirst (const T& el); // перед первым
 	void inslast  (const T& el);   // последним
 	void inscurr  (const T& el);   // текущим
 
@@ -211,17 +211,17 @@ size++;
   {
 	  if (size == 1)
 	  {
-		  delete pCurr;
+		  delete pFirst;
 		  pFirst = pCurr = pLast = pPrew = pStop;
 		  pos = 0;
 	  }
 
 	  else
 	  {
-		  TLink<T>* buf = pCurr;
 		  pCurr = pCurr-> pNext;
-		  delete buf;
-		  pos++;
+		  delete pPrew->pNext;
+		  pPrew->pNext=pCurr;
+		 
 	  }
 	  size--;
   }

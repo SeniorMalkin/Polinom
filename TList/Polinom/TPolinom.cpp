@@ -1,7 +1,13 @@
 #include "TPolinom.h"
 
 
+TPolinom::TPolinom( ):_TList_Head<TMonom>()
+{
+	pHead ->val.coeff=0;
+	pHead->val.index=-1;
 
+}
+/*
 TPolinom::TPolinom(int monom[][2], int nm)
 {
 	TMonom mon;
@@ -16,14 +22,43 @@ TPolinom::TPolinom(int monom[][2], int nm)
 	}
 
 }
-TPolinom::TPolinom(const TPolinom &pol)
+*/
+TPolinom::TPolinom(TMonom el[], int nm):_TList_Head<TMonom>()
 {
-	for (pol.Reset(); !pol.IsEnd(); GoNext())
+	pHead ->val.coeff=0;
+	pHead->val.index=-1;
+	for(int i=0;i<size;i++)
+		inslast(el[i]);
+}
+TPolinom::TPolinom(TPolinom &pol)
+{
+	for (pol.Reset(); !pol.IsEnd(); pol.GoNext())
 	{
-
+		insbyorder(pCurr->val);
 	}
+}
+void TPolinom::insbyorder(const TMonom& tm)
+{
+	for(Reset(); !IsEnd(); GoNext())
+	{
+		if(GetCurr()==tm)
+		{
+			pCurr->val.coeff+=tm.coeff;
+			if(pCurr->val.coeff==0)
+				delcurr();
+			return;
+		}
+		if(GetCurr()<tm)
+		{
+			inscurr(tm);
+			return;
+		}
+		inslast(tm);
+	}
+
 }
 
 TPolinom::~TPolinom()
 {
+	
 }
