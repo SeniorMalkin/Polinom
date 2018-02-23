@@ -28,7 +28,8 @@ protected:
 public:
 	_TList_();
 	~_TList_();
-	bool IsEmpty       ( void );   // список пуст?
+	/* список пуст?*/
+	bool IsEmpty       ( void );   
 	int  GetListLength ( void ) { return size; }   // число звеньев в списке
 	T    GetPrew       ( void );   // получить значение предществующего звена
 	void GetList       ( void );   // вывести список
@@ -38,7 +39,8 @@ public:
 	T    GetCurr    ( void );      // получить значение текущего звена
 	int  GetCurrPos ( void ) { return pos; }     // получить номер текущего звена
 	void Reset      ( void );      // перейти к началу списка
-	void GoNext     ( void );      // перейти к следующему звену
+	/* перейти к следующему звену*/
+	void GoNext     ( void );      
 	bool IsEnd      ( void );      // конец списка?
 
 	//Вставка звеньев
@@ -165,7 +167,7 @@ size++;
   }
 
 //*******************************************************
-
+/* перейти к следующему звену*/
   template <class T>
   void _TList_<T>::GoNext()
   {
