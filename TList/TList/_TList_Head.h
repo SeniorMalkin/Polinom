@@ -37,7 +37,7 @@ struct TMonom
 	{
 		int sum = x * 100 + y * 10 + z;
 		int sum1 = t2.x * 100 + t2.y * 10 + t2.z;
-		if (sum1 == sum)
+		if ((sum1 == sum) && (coeff==t2.coeff))
 			return true;
 		else
 			return false;
