@@ -503,7 +503,8 @@ Polinom  Polinom::operator-(Polinom &q)
 			}
 			else
 			{
-				result->inslast(pCurr->val);
+				buf = pCurr->val;
+				result->inslast(buf);
 				GoNext();
 			}
 		}
@@ -521,6 +522,255 @@ Polinom & Polinom::operator=(Polinom& q)
 	}
 	return *this;
 
+}
+
+void Polinom::magic(string st)
+{
+	string str1 = st;
+	string str = st;
+	cmatch result;
+	list<string> mylist;
+	list<string> mylist1;
+	regex regular("([\\dx{0,1}y{0,1}z{0,1}\^{0,1}]+)");
+	regex regular1("- ([\\dx{0,1}y{0,1}z{0,1}\^{0,1}]+)");
+	regex mon("([\\d-{0,1}]+)");
+	regex reg_x("x^([\\dx]+)");
+	regex reg_y("([\\dy{1}\^{0,1}]+)");
+	regex reg_z("([\\dz{1}\^{0,1}]+)");
+	while (regex_search(str1.c_str(), result, regular))
+	{
+		mylist.push_back(result[0]);
+		str1 = result.suffix();
+	}
+	while (regex_search(str.c_str(), result, regular1))
+	{
+		mylist1.push_back(result[0]);
+		str = result.suffix();
+	}
+	list<string>::iterator i, j;
+	i = mylist.begin();
+	j = mylist1.begin();
+	while (i != mylist.end())
+	{
+		if((!mylist1.empty()))
+		if (("- " + (*i)).compare((*j)) == 0)
+		{
+			(*i).insert((*i).begin(), '-');
+			++j;
+		}
+
+		++i;
+	}
+	i = mylist.begin();
+	int k = 0;
+	int c = 0;
+	int x = 0;
+	int y = 0;
+	int z = 0;
+	TMonom tmp;
+	while (i != mylist.end())
+	{
+		str1 = (*i);
+		/*int j = 0;
+		while (j != str1.size())
+		{
+			if (str1[j] == 'x' || str1[j] == 'y' || str1[j] == 'z')
+				break;
+			j++;
+		}
+		c = atoi(str1.substr(0, j).c_str());
+		str1 = str1.substr(j, str1.size());
+		string buf = str1;
+		regex_search(str1.c_str(), result, reg_x);
+		
+		x = atoi(result[0].str().substr(2, result[0].str().size()).c_str());
+		buf = result.suffix();
+			
+		
+		regex_search(buf.c_str(), result, reg_y);
+		
+		y = atoi(result[0].str().substr(2, result[0].str().size()).c_str());
+		buf = result.suffix();
+		
+		regex_search(buf.c_str(), result, reg_z);
+		
+	    z = atoi(result[0].str().substr(2, result[0].str().size()).c_str());
+			*/
+		
+		while (regex_search(str1.c_str(), result, mon))
+		{
+			switch (k)
+			{
+			case 0:
+			{
+				c = atoi((result[0].str()).c_str());
+				break;
+			}
+			case 1:
+			{
+				x = atoi((result[0].str()).c_str());
+				break;
+			}
+			case 2:
+			{
+				y = atoi((result[0].str()).c_str());
+				break;
+			}
+			case 3:
+			{
+				z = atoi((result[0].str()).c_str());
+			}
+			}
+			str1 = result.suffix();
+			k++;
+		}
+		tmp.coeff = c;
+		tmp.x = x;
+		tmp.y = y;
+		tmp.z = z;
+		insbyorder(tmp);
+		k = 0;
+		++i;
+	}
+}
+string Polinom::str(void)
+{
+	string result;
+	Reset();
+	int i = 0;
+	while (!IsEnd())
+	{
+		if (i == 0)
+		{
+			result += to_string((int)(pCurr->val.coeff));
+			switch (pCurr->val.x)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "x";
+				break;
+			default:
+				result += "x^";
+				result += to_string(pCurr->val.x);
+				break;
+			}
+			switch (pCurr->val.y)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "y";
+				break;
+			default:
+				result += "y^";
+				result += to_string(pCurr->val.y);
+				break;
+			}
+			switch (pCurr->val.z)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "z";
+				break;
+			default:
+				result += "z^";
+				result += to_string(pCurr->val.z);
+				break;
+			}
+			i++;
+			GoNext();
+			continue;
+		}
+
+		if (pCurr->val.coeff < 0)
+		{
+			result += " ";
+			result+= to_string((int)pCurr->val.coeff);
+			switch (pCurr->val.x)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "x";
+				break;
+			default:
+				result += "x^";
+				result += to_string(pCurr->val.x);
+				break;
+			}
+			switch (pCurr->val.y)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "y";
+				break;
+			default:
+				result += "y^";
+				result += to_string(pCurr->val.y);
+				break;
+			}
+			switch (pCurr->val.z)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "z";
+				break;
+			default:
+				result += "z^";
+				result += to_string(pCurr->val.z);
+				break;
+			}
+			i++;
+			GoNext();
+		}
+		else
+		{
+			result += " + ";
+			result += to_string((int)pCurr->val.coeff);
+			switch (pCurr->val.x)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "x";
+				break;
+			default:
+				result += "x^";
+				result += to_string(pCurr->val.x);
+				break;
+			}
+			switch (pCurr->val.y)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "y";
+				break;
+			default:
+				result += "y^";
+				result += to_string(pCurr->val.y);
+				break;
+			}
+			switch (pCurr->val.z)
+			{
+			case 0:
+				break;
+			case 1:
+				result += "z";
+				break;
+			default:
+				result += "z^";
+				result += to_string(pCurr->val.z);
+				break;
+			}
+			GoNext();
+		}
+	}
+	return result;
 }
 Polinom::~Polinom()
 {

@@ -1,6 +1,8 @@
 #pragma once
 #include "../TList/_TList_Head.h"
 #include <string>
+#include <list> 
+#include <regex>
 class Polinom : public _TList_Head<TMonom>
 {
 public:
@@ -17,6 +19,8 @@ public:
 	Polinom  operator+(Polinom &q); 
 	Polinom  operator-(Polinom &q);// сложение полиномов
 	Polinom & operator=(Polinom &q); // присваивание
+	string str(void);
+	void magic(string st);
 	~Polinom();
 };
 
